@@ -12,6 +12,8 @@ HSN hsn; //input arguments:(how many periphelars, their names) - Define who this
 
 void setup() {
   // put your setup code here, to run once:
+  //TCCR2B = TCCR2B & B11111000 | 0x01; // sets pin 3 and 11 timer to have PWM at 980 hz - only for led strips
+  //TCCR2B = TCCR2B & 0b11111000 | 0x03;
   Serial.begin(9600);
   radio.begin();
   radio.openWritingPipe(pipe_write);
@@ -22,34 +24,8 @@ void setup() {
 
 
 
-
-int Rled = 6;
-int Gled = 5;
-int Bled = 3;
-int msg[1];
-
-void changeLED(int input){
-  Serial.println("in changeLED");
-  unsigned x = (input / 1000U) % 10;
-  int value = input - x*1000 ; 
-  if (x == 1){ //1 is red
-    analogWrite(Rled,value);
-    Serial.print("red: "); Serial.println(value);
-  }
-  if (x == 2){ //2 is green
-    analogWrite(Gled,value);
-    Serial.print("green: "); Serial.println(value);
-  }
-  if (x == 3){ //3 is blue
-    analogWrite(Bled,value);
-    Serial.print("blue: "); Serial.println(value);
-  }
-  
-}
-
 void loop() {
-if (hsn.RadioMessageAvailable(radio)){
-  hsn.ExecuteCommand(radio); //feedback included in this method
-}
-
+  if (hsn.RadioMessageAvailable(radio)){
+    hsn.ExecuteCommand(radio); //feedback included in this method
+  }
 }
